@@ -2,6 +2,10 @@
 
 # Add source files here as the project grows.
 SRC_DIR = ../src
+SRC    += $(SRC_DIR)/rom_logsin.vhd
+SRC    += $(SRC_DIR)/rom_exp.vhd
+SRC    += $(SRC_DIR)/float2fixed.vhd
+SRC    += $(SRC_DIR)/calc_sine.vhd
 SRC    += $(SRC_DIR)/ym2151.vhd
 
 # These are testbench related.

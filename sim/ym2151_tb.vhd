@@ -53,7 +53,7 @@ begin
 
    p_test_running : process
    begin
-      wait for 100 ms;
+      wait for 10 ms;
       test_running_s <= '0';
       wait;
    end process p_test_running;

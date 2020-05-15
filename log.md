@@ -58,3 +58,59 @@ the PWM clock domain.
 The design can be run on the Nexys4DDR board, and the output can be read and
 analyzed by audacity.
 
+# 2020 May 15
+Another update today. This time, I've implemented the ROM's for calculating the
+sine function. This is actually two ROM's; one calculates the logarithm of the
+sine, and the other calculates the exponential function.
+
+Much of the inspiration has come from this
+[repo](https://github.com/sauraen/YM2612/blob/master/Source/operator.vhd), but
+where I have tried to rewrite it into a more readable form.
+
+The heart of the waveform generator is being able to calculate the sine of an
+angle. Rather than doing this in a single ROM lookup, the calculation is split
+into two different ROMs:
+* logsin, which calculates y=-log2(sin(x)).
+* exp, which calculates z=0.5^y.
+Composing these two functions gives indeed z=sin(x).
+
+The reason for splitting the sine calculation in two like this, is to make the
+envelope generation much easier, as this can now be achieved by a simple
+addition.
+
+The devil is in the details, as the saying goes, and so it is here too. In
+particular, the binary representation of the numbers adds considerable
+complexity.
+
+In the following I'm referring to the file
+[calc\_sine.vhd](src/calc\_sine.vhd). The calculation is split into a number of
+stages.
+
+## Stage 0
+The input phase\_i represents an angle between 0 to 2\*pi, and has a resolution
+of 10 bits.
+
+First some symmetries of the sine function is used to reduce the angle to the
+first quadrant, i.e. between 0 to pi/2, with a resolution of 8 bits. The sign
+of the result is stored separately.
+
+## Stage 1
+Here we use the first ROM, logsin, to calculate y=-log2(sin(x)). The input has
+resolution of 8 bits, and the output has resolution of 12 bits.
+
+The result is in units of 1/256'th powers of 0.5.
+
+## Stage 2
+The upper four bits of logsin are the exponent part (in base 2).  They indicate
+how many bits to shift (between 0 and 15).  The lower eight bits of logsin are
+fed to the second ROM, exp, to calculate z=0.5^y, which is the mantissa.  The
+output of this ROM has resolution of 11 bits.
+
+## Stage 3
+This last stage instantiates the block float2fixed, which combines the sign,
+the exponent, and the mantissa to generate the output value.
+
+Finally, I've updated the file ym2151.vhd to instantiate this new calc\_sine
+block.  Note, that there is a conversion from signed to unsigned, i.e. a shift
+by 0.5. This is achieved simply by negating the MSB.
+

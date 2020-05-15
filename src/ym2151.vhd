@@ -32,25 +32,44 @@ end entity ym2151;
 architecture synthesis of ym2151 is
 
    -- This should give a frequency of 3579545*8/2^16 = 437 Hz.
-   constant C_WAV_INC : integer := 8;
+   constant C_PHASE_INC : integer := 8;
 
-   signal wav_r : std_logic_vector(15 downto 0);
+   signal phase_r  : std_logic_vector(15 downto 0);
+   signal sin_s    : std_logic_vector(15 downto 0) := (others => '0');
+
+   constant C_OFFSET : std_logic_vector(15 downto 0) := X"8000";
 
 begin
 
-   -- This is just a quick test to generate a sawtooth waveform.
-   p_wav : process (clk_i)
+   ----------------------------------------------------
+   -- Generate linearly increasing phase.
+   ----------------------------------------------------
+
+   p_phase : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         wav_r <= wav_r + C_WAV_INC;
+         phase_r <= phase_r + C_PHASE_INC;
 
          if rst_i = '1' then
-            wav_r <= (others => '0');
+            phase_r <= (others => '0');
          end if;
       end if;
-   end process p_wav;
+   end process p_phase;
 
-   wav_o <= wav_r;
+
+   ----------------------------------------------------
+   -- Calculate sin of the phase
+   ----------------------------------------------------
+
+   i_calc_sine : entity work.calc_sine
+      port map (
+         clk_i   => clk_i,
+         phase_i => phase_r(15 downto 6),
+         sin_o   => sin_s(15 downto 2)
+      );
+
+   -- Convert from signed to unsigned.
+   wav_o <= sin_s xor C_OFFSET;
 
 end architecture synthesis;
 

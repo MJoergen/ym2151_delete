@@ -2,6 +2,10 @@
 XILINX_DIR = /opt/Xilinx/Vivado/2019.2
 SRC_DIR    = ../src
 
+SRC   += $(SRC_DIR)/rom_logsin.vhd
+SRC   += $(SRC_DIR)/rom_exp.vhd
+SRC   += $(SRC_DIR)/float2fixed.vhd
+SRC   += $(SRC_DIR)/calc_sine.vhd
 SRC   += $(SRC_DIR)/ym2151.vhd
 SRC   += nexys4ddr.vhd
 SRC   += clk_rst.vhd
