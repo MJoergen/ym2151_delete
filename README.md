@@ -8,6 +8,7 @@ I'm keeping a [log](log.md) of my progress.
 * [src](src) : Contains source files for the YM2151 module.
 * [doc](doc) : Contains documentation.
 * [sim](sim) : Contains testbench and other files used during simulation.
+* [nexys4ddr](nexys4ddr) : Contains an example design that runs on the Nexys4DDR board.
 
 ## Links
 I'm greatly influenzed by [this verilog implementation](https://github.com/jotego/jt51/).
