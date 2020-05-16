@@ -34,7 +34,7 @@ which corresponds to the frequency of the A2 note, i.e. 440 / 4 = 110 Hz.
 
 The signal ph\_phase\_X entering the u\_op module is, as previously stated, 10
 bits wide.  Using symmetries it is converted to 8 bits in the signal aux\_X,
-which is the fed into the logsin table lookup with the result in the login
+which is then fed into the logsin table lookup with the result in the login
 signal.
 
 The actual function calculated is
