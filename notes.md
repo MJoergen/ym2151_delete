@@ -45,7 +45,7 @@ Then the signal atten\_internal\_XI (which is 12 bits wide) is fed into the exp
 table lookup with the result in the op\_XIII signal (which is 13 bits wide).
 
 The actual function calculated is
-op\_XIII = 2^13 \* exp(-ln(2)\*atten\_internal\_XI/256)
+op\_XIII = 2^13 \* exp(-ln(2)\*atten\_internal\_XI/256).
 For example, the input atten\_internal\_XI = 0x1A9 gives the output op\_XIII =
 0x0A18.
 
