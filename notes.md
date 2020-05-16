@@ -27,10 +27,10 @@ only asserted every second clock cycle).
 When playing a 440 Hz signal the increment is 0x02038 = 8248, which is
 equivalent to 440/55930\*2^20.
 
-The address phinc\_addr\_III into the u\_phinctable is 0x280, which consists of
-the four bits 1010 from the key code appended with the 6 fraction bits, which
-are all zero. The value read out in phinc\_III is 0x80E, which corresponds to the
-frequency of the A2 note, i.e. 440 / 4 = 110 Hz.
+The address phinc\_addr\_III (10 bits) into the u\_phinctable is 0x280, which
+consists of the four bits 1010 from the key code appended with the 6 fraction
+bits, which are all zero. The value read out in phinc\_III (12 bits) is 0x80E,
+which corresponds to the frequency of the A2 note, i.e. 440 / 4 = 110 Hz.
 
 The signal ph\_phase\_X entering the u\_op module is, as previously stated, 10
 bits wide.  Using symmetries it is converted to 8 bits in the signal aux\_X,
