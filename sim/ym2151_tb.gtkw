@@ -1,36 +1,44 @@
 [*]
 [*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
-[*] Fri May 15 17:55:56 2020
+[*] Sat May 16 10:38:28 2020
 [*]
 [dumpfile] "/home/mike/git/MJoergen/ym2151/sim/build/ym2151_tb.fst"
-[dumpfile_mtime] "Fri May 15 17:55:40 2020"
-[dumpfile_size] 30175
+[dumpfile_mtime] "Sat May 16 10:35:36 2020"
+[dumpfile_size] 84357
 [savefile] "/home/mike/git/MJoergen/ym2151/sim/ym2151_tb.gtkw"
 [timestart] 0
-[size] 1219 794
+[size] 1267 794
 [pos] -1 -1
 *-41.545895 303002197380150 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] i_ym2151.
+[treeopen] i_ym2151.i_calc_freq.
 [treeopen] i_ym2151.i_calc_sine.
 [sst_width] 379
-[signals_width] 170
+[signals_width] 276
 [sst_expanded] 1
 [sst_vpaned_height] 211
-@800200
+@c00200
 -rom_logsin
 @22
 i_ym2151.i_calc_sine.i_rom_logsin.angle_i[7:0]
 i_ym2151.i_calc_sine.i_rom_logsin.logsin_o[11:0]
-@1000200
+@1401200
 -rom_logsin
-@800200
+@c00201
 -rom_exp
 @22
 i_ym2151.i_calc_sine.i_rom_exp.atten_i[7:0]
 i_ym2151.i_calc_sine.i_rom_exp.exp_o[10:0]
-@1000200
+@1401201
 -rom_exp
 @8024
 i_ym2151.wav_o[15:0]
+@800200
+-rom_freq
+@22
+i_ym2151.i_calc_freq.i_rom_freq.addr_i[9:0]
+i_ym2151.i_calc_freq.i_rom_freq.data_o[11:0]
+@1000200
+-rom_freq
 [pattern_trace] 1
 [pattern_trace] 0

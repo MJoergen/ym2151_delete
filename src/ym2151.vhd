@@ -31,15 +31,31 @@ end entity ym2151;
 
 architecture synthesis of ym2151 is
 
-   -- This should give a frequency of 3579545*8/2^16 = 437 Hz.
-   constant C_PHASE_INC : integer := 8;
+   signal phase_inc_s : std_logic_vector(19 downto 0);
+   signal cnt_r       : std_logic_vector(4 downto 0);
+   signal phase_r     : std_logic_vector(19 downto 0);
 
-   signal phase_r  : std_logic_vector(15 downto 0);
-   signal sin_s    : std_logic_vector(15 downto 0) := (others => '0');
+   signal sin_s       : std_logic_vector(15 downto 0) := (others => '0');
 
-   constant C_OFFSET : std_logic_vector(15 downto 0) := X"8000";
+   constant C_OFFSET  : std_logic_vector(15 downto 0) := X"8000";
 
 begin
+
+   ----------------------------------------------------
+   -- Calculate frequency from note.
+   ----------------------------------------------------
+
+   i_calc_freq : entity work.calc_freq
+      generic map (
+         G_CLOCK_HZ => G_CLOCK_HZ
+      )
+      port map (
+         clk_i       => clk_i,
+         note_i      => "1001010",
+         fraction_i  => "000000",
+         phase_inc_o => phase_inc_s
+      ); -- i_calc_freq
+
 
    ----------------------------------------------------
    -- Generate linearly increasing phase.
@@ -48,9 +64,13 @@ begin
    p_phase : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         phase_r <= phase_r + C_PHASE_INC;
+         cnt_r <= cnt_r + 1;
+         if cnt_r = 0 then
+            phase_r <= phase_r + phase_inc_s;
+         end if;
 
          if rst_i = '1' then
+            cnt_r   <= (others => '0');
             phase_r <= (others => '0');
          end if;
       end if;
@@ -64,7 +84,7 @@ begin
    i_calc_sine : entity work.calc_sine
       port map (
          clk_i   => clk_i,
-         phase_i => phase_r(15 downto 6),
+         phase_i => phase_r(19 downto 10),
          sin_o   => sin_s(15 downto 2)
       );
 

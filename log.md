@@ -114,3 +114,25 @@ Finally, I've updated the file ym2151.vhd to instantiate this new calc\_sine
 block.  Note, that there is a conversion from signed to unsigned, i.e. a shift
 by 0.5. This is achieved simply by negating the MSB.
 
+The widths of the various signals are chosen to match those of
+[jotego/jt51](https://github.com/jotego/jt51/).
+
+# 2020 May 16
+The next step is to introduce the frequency calculation. All frequencies are
+translated to a "phase increment", which is read from yet another ROM.
+
+The current phase is stored with 20-bit precision, where the upper 10 bits are
+fed to the sine table calculation. The phase is updated once every 32 clock
+cycles, just like in the final version.  Each time the phase is updated with
+the phase increment.  This is what happens in the p\_phase process in
+ym2151.vhd.
+
+The phase increment is calculated in calc\_freq based on the current note being
+played.  The ROM has 10 bits of input and 12 bits of output.  The values in the
+ROM correspond to octave 0.  For instance, the key A0 (with frequency 13.75 Hz)
+corresponds to index 0x280 (640) and has the value 0x80E (2062).
+
+The update frequency is 3579545/32 Hz, i.e. 112 kHz. The phase increment at
+each update is 13.75/111860 = 1.229\*10^-4.  Scaling this by a factor of 2^24
+gives indeed 2062.
+

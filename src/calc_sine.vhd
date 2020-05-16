@@ -10,6 +10,8 @@
 -- The input phase_i is interpreted as a unsigned value in the interval 0 to
 -- 2*pi.
 -- The output sin_o is interpreted as a signed value between -1 and 1.
+--
+-- Latency is 3 clock cycles.
 
 library ieee;
 use ieee.std_logic_1164.all;
