@@ -1,0 +1,51 @@
+# Notes about jotego's implementation.
+
+Since I'm often comparing to the implementation in
+[jotego/jt51](https://github.com/jotego/jt51/), I find it worthwhile to write
+some notes / comments.
+
+The following notes apply to the situation after the following sequence of
+register writes:
+
+```
+20 c7    # Mode 7
+28 4a    # Note A4 (440 Hz)
+40 01    # MUL
+60 00    # Total attenuation level
+80 1f    # Attack Rate
+a0 00    # Decay Rate
+e0 ff    # Release Rate
+08 08    # Key ON
+```
+
+The signal pg\_phase\_X leaving the u\_pg module is 10 bits wide. This comes
+from the upper 10 bits of a 20 bits wide phase signal ph\_X. Likewise there is
+a corresponding 20 bits wide phase incremenent phase\_step\_VII, which is added
+to the phase at a rate of 3579545/2/32 = 55.93 kHz (because the signal cen is
+only asserted every second clock cycle).
+
+When playing a 440 Hz signal the increment is 0x02038 = 8248, which is
+equivalent to 440/55930\*2^20.
+
+The address phinc\_addr\_III into the u\_phinctable is 0x280, which consists of
+the four bits 1010 from the key code appended with the 6 fraction bits, which
+are all zero. The value read out in phinc\_III is 0x80E, which corresponds to the
+frequency of the A2 note, i.e. 440 / 4 = 110 Hz.
+
+The signal ph\_phase\_X entering the u\_op module is, as previously stated, 10
+bits wide.  Using symmetries it is converted to 8 bits in the signal aux\_X,
+which is the fed into the logsin table lookup with the result in the login
+signal.
+
+The actual function calculated is
+logsin = -log2(cos((aux+0.5)/256\*pi/2))\*256.
+For example the input aux\_X = 0xCB gives the output logsin = 0x1A9.
+
+Then the signal atten\_internal\_XI (which is 12 bits wide) is fed into the exp
+table lookup with the result in the op\_XIII signal (which is 13 bits wide).
+
+The actual function calculated is
+op\_XIII = 2^13 \* exp(-ln(2)\*atten\_internal\_XI/256)
+For example, the input atten\_internal\_XI = 0x1A9 gives the output op\_XIII =
+0x0A18.
+
