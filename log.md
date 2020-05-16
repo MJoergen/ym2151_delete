@@ -136,4 +136,5 @@ The update frequency is 3579545/32 Hz, i.e. 112 kHz. The phase increment at
 each update is 13.75/111860 = 1.229\*10^-4.  Scaling this by a factor of 2^24
 gives indeed 2062.
 
-Oh, and I moved the section about jt51 to a separate [file](notes.md).
+Oh, and I wrote a section about the [jt51](jt51.md).
+
