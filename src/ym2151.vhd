@@ -31,6 +31,11 @@ end entity ym2151;
 
 architecture synthesis of ym2151 is
 
+   signal cen_r       : std_logic := '0';
+
+   signal note_s      : std_logic_vector(6 downto 0) := "1001010";
+   signal fraction_s  : std_logic_vector(5 downto 0) := "000000";
+
    signal phase_inc_s : std_logic_vector(19 downto 0);
    signal cnt_r       : std_logic_vector(4 downto 0);
    signal phase_r     : std_logic_vector(19 downto 0);
@@ -42,6 +47,18 @@ architecture synthesis of ym2151 is
 begin
 
    ----------------------------------------------------
+   -- Generate clock enable
+   ----------------------------------------------------
+
+   p_cen : process (clk_i)
+   begin
+      if rising_edge(clk_i) then
+         cen_r <= not cen_r;
+      end if;
+   end process p_cen;
+
+
+   ----------------------------------------------------
    -- Calculate frequency from note.
    ----------------------------------------------------
 
@@ -51,8 +68,8 @@ begin
       )
       port map (
          clk_i       => clk_i,
-         note_i      => "1001010",
-         fraction_i  => "000000",
+         note_i      => note_s,
+         fraction_i  => fraction_s,
          phase_inc_o => phase_inc_s
       ); -- i_calc_freq
 
@@ -63,7 +80,7 @@ begin
 
    p_phase : process (clk_i)
    begin
-      if rising_edge(clk_i) then
+      if rising_edge(clk_i) and cen_r = '1' then
          cnt_r <= cnt_r + 1;
          if cnt_r = 0 then
             phase_r <= phase_r + phase_inc_s;

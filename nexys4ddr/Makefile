@@ -2,6 +2,8 @@
 XILINX_DIR = /opt/Xilinx/Vivado/2019.2
 SRC_DIR    = ../src
 
+SRC   += $(SRC_DIR)/rom_freq.vhd
+SRC   += $(SRC_DIR)/calc_freq.vhd
 SRC   += $(SRC_DIR)/rom_logsin.vhd
 SRC   += $(SRC_DIR)/rom_exp.vhd
 SRC   += $(SRC_DIR)/float2fixed.vhd
@@ -25,7 +27,7 @@ build/nexys4ddr.bit: build/nexys4ddr.tcl $(SRC) nexys4ddr.xdc
 	bash -c "source $(XILINX_DIR)/settings64.sh ; vivado -mode tcl -source $<"
 
 # Generate the build script used by Vivado
-build/nexys4ddr.tcl: $(SRC)
+build/nexys4ddr.tcl: $(SRC) Makefile
 	mkdir -p build
 	echo "# This is a tcl command script for the Vivado tool chain" > $@
 	echo "read_vhdl -vhdl2008 { $(SRC)  }" >> $@

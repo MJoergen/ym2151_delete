@@ -3,9 +3,17 @@
 -- Project: YM2151 implementation
 --
 -- Description: This module performs a table lookup to calculate the
--- function y=0.5^x.
--- The intervals are 0 <= x < 1 and 0.5 <= y < 1.
+-- exp function.
+--
+-- The input (8 bits) is interpreted as a value between 0 and 1.
+-- The output (11 bits) is a value between 0 and 1.
+--
+-- The actual function calculated is y = 0.5^x.
 -- The MSB of exp_o will always be 1.
+--
+-- Example: The input 0x68=104 corresponds to x=105/256 = 0.4102.
+-- The corresponding output is 0.5^0.4102 = 0.7525, which
+-- is encoded as 0.7525*2048 = 1541 = 0x605.
 --
 -- Latency is 1 clock cycle.
 
@@ -16,9 +24,9 @@ use ieee.math_real.all;
 
 entity rom_exp is
    port (
-      clk_i   : in  std_logic;
-      atten_i : in  std_logic_vector(7 downto 0);
-      exp_o   : out std_logic_vector(10 downto 0)
+      clk_i  : in  std_logic;
+      addr_i : in  std_logic_vector(7 downto 0);
+      data_o : out std_logic_vector(10 downto 0)
    );
 end entity rom_exp;
 
@@ -35,9 +43,9 @@ architecture synthesis of rom_exp is
       variable ROM_v   : mem_t := (others => (others => '0'));
    begin
       for i in 0 to 255 loop
-         x_v := real(i+1) / scale_x; -- Adding one ensures the exp is never one.
-         y_v := exp(x_v*log(0.5));
-         int_v := integer(y_v*scale_y+0.5);
+         x_v      := real(i+1) / scale_x;    -- Adding one ensures the exp is never one.
+         y_v      := exp(x_v*log(0.5));
+         int_v    := integer(y_v*scale_y);   -- Rounding is automatic.
          ROM_v(i) := to_stdlogicvector(int_v, 11);
       end loop;
 
@@ -52,7 +60,7 @@ begin
    p_read : process (clk_i)
    begin
       if rising_edge(clk_i) then
-         exp_o <= mem_r(to_integer(atten_i));
+         data_o <= mem_r(to_integer(addr_i));
       end if;
    end process p_read;
 

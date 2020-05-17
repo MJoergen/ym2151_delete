@@ -138,3 +138,17 @@ gives indeed 2062.
 
 Oh, and I wrote a section about the [jt51](jt51.md).
 
+# 2020 May 17
+I decided to modify my implementation slightly, to more accurately match that
+of jotego's.  The changes include some bit widths, and also introducing the
+clock enable, so that the phase is only updated every second clock cycle.
+Scaling factors have been changed as well to reflect the other changes, and
+some the comments have been updated.
+
+Yesterdays changes broke the synthesis because I forgot to update
+nexys4ddr/Makefile, so that is fixed now.
+
+I learned that the cast integer() automatically does rounding, so no need to
+add 0.5.  And I learned that the MUL register in the YM2151 is needed to get
+the correct output frequencies.
+

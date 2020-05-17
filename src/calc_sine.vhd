@@ -74,9 +74,9 @@ begin
 
    i_rom_logsin : entity work.rom_logsin
       port map (
-         clk_i    => clk_i,
-         angle_i  => phase_quad_s,
-         logsin_o => logsin_I_s
+         clk_i  => clk_i,
+         addr_i => phase_quad_s,
+         data_o => logsin_I_s
       ); -- i_rom_logsin
 
 
@@ -94,9 +94,9 @@ begin
 
    i_rom_exp : entity work.rom_exp
       port map (
-         clk_i   => clk_i,
-         atten_i => logsin_I_s(7 downto 0),
-         exp_o   => mantissa_II_s
+         clk_i  => clk_i,
+         addr_i => logsin_I_s(7 downto 0),
+         data_o => mantissa_II_s
       ); -- i_rom_exp
 
 

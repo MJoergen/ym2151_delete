@@ -35,7 +35,7 @@ architecture synthesis of calc_freq is
    signal freq_I_s       : std_logic_vector(11 downto 0);
 
    -- Stage 2
-   signal phase_inc_II_r : std_logic_vector(23 downto 0);
+   signal phase_inc_II_r : std_logic_vector(21 downto 0);
 
 begin
 
@@ -83,7 +83,7 @@ begin
       end if;
    end process p_phase_inc;
 
-   phase_inc_o <= phase_inc_II_r(23 downto 4);
+   phase_inc_o <= phase_inc_II_r(21 downto 2);
 
 end architecture synthesis;
 
