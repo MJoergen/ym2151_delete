@@ -23,7 +23,8 @@ end entity wav2file;
 
 architecture simulation of wav2file is
 
-   signal cnt : std_logic_vector(4 downto 0) := (others => '0');
+   -- Only write every 2*32 = 64 clock cycles.
+   signal cnt : std_logic_vector(5 downto 0) := (others => '0');
 
 begin
 
@@ -66,10 +67,10 @@ begin
       write_16_bits(output_file, X"0000");
       write_16_bits(output_file, X"0001");   -- 1 = linear quantization
       write_16_bits(output_file, X"0001");   -- 1 = mono
-      write_16_bits(output_file, X"B4F4");   -- sample rate = 111860
+      write_16_bits(output_file, X"DA7A");   -- sample rate = 55930
+      write_16_bits(output_file, X"0000");
+      write_16_bits(output_file, X"B4F4");   -- byte rate = 111860
       write_16_bits(output_file, X"0001");
-      write_16_bits(output_file, X"69E8");   -- byte rate = 223720
-      write_16_bits(output_file, X"0003");
       write_16_bits(output_file, X"0002");   -- 2 bytes per sample
       write_16_bits(output_file, X"0010");   -- 16 bits
 

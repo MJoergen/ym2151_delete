@@ -152,3 +152,5 @@ I learned that the cast integer() automatically does rounding, so no need to
 add 0.5.  And I learned that the MUL register in the YM2151 is needed to get
 the correct output frequencies.
 
+Testbench was updated to reflect these changes too.
+
