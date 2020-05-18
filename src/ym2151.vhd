@@ -31,18 +31,19 @@ end entity ym2151;
 
 architecture synthesis of ym2151 is
 
-   signal cen_r       : std_logic := '0';
+   signal cen_r          : std_logic := '0';
 
-   signal note_s      : std_logic_vector(6 downto 0) := "1001010";
-   signal fraction_s  : std_logic_vector(5 downto 0) := "000000";
+   signal device_idx_s   : std_logic_vector(4 downto 0);
+   signal key_code_s     : std_logic_vector(6 downto 0);
+   signal key_fraction_s : std_logic_vector(5 downto 0);
 
-   signal phase_inc_s : std_logic_vector(19 downto 0);
-   signal cnt_r       : std_logic_vector(4 downto 0);
-   signal phase_r     : std_logic_vector(19 downto 0);
+   signal phase_inc_s    : std_logic_vector(19 downto 0);
+   signal cnt_r          : std_logic_vector(4 downto 0);
+   signal phase_r        : std_logic_vector(19 downto 0);
 
-   signal sin_s       : std_logic_vector(15 downto 0) := (others => '0');
+   signal sin_s          : std_logic_vector(15 downto 0) := (others => '0');
 
-   constant C_OFFSET  : std_logic_vector(15 downto 0) := X"8000";
+   constant C_OFFSET     : std_logic_vector(15 downto 0) := X"8000";
 
 begin
 
@@ -59,6 +60,25 @@ begin
 
 
    ----------------------------------------------------
+   -- Process configuration writes
+   ----------------------------------------------------
+
+   i_config : entity work.config
+      port map (
+         clk_i          => clk_i,
+         rst_i          => rst_i,
+         cen_i          => cen_r,
+         cfg_valid_i    => cfg_valid_i,
+         cfg_ready_o    => cfg_ready_o,
+         cfg_addr_i     => cfg_addr_i,
+         cfg_data_i     => cfg_data_i,
+         device_idx_o   => device_idx_s,
+         key_code_o     => key_code_s,
+         key_fraction_o => key_fraction_s
+      ); -- i_config
+
+
+   ----------------------------------------------------
    -- Calculate frequency from note.
    ----------------------------------------------------
 
@@ -68,8 +88,8 @@ begin
       )
       port map (
          clk_i       => clk_i,
-         note_i      => note_s,
-         fraction_i  => fraction_s,
+         note_i      => key_code_s,
+         fraction_i  => key_fraction_s,
          phase_inc_o => phase_inc_s
       ); -- i_calc_freq
 

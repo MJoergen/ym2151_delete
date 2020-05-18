@@ -8,9 +8,10 @@ used a DSP to perform multiplication rather than using a lookup into a table of
 exponentials. However, that turns out to be a bad idea, because there is a need
 for (at least) three multiplications.
 
-Instead, I will use the exponential method. The implementaion will therefore
-much more closely resemble that of [jotego/jt51](https://github.com/jotego/jt51/).
-Essentially, this will be a translation of jotego's implementation to VHDL.
+Instead, I will use the exponential method. The implementation will therefore
+much more closely resemble that of
+[jotego/jt51](https://github.com/jotego/jt51/).  In a loose sense, this will be
+a translation of jotego's implementation to VHDL.
 
 So the first checkin establishes the directory structure, where the files for synthesis
 are placed in the [src](src) directory, while files for simulation are placed in
@@ -31,7 +32,7 @@ The waveform output is 16-bit unsigned integer, which represents a fractional
 value between logical 0 and logical 1.
 
 The YM2151 module must be clocked with a frequency of 3.579 MHz, and the output
-can be sampled as 1/32th of that frequency, i.e. 112 kHz.
+can be sampled at 1/64th of that frequency, i.e. 56 kHz.
 
 The top level implementation for now just generates a saw tooth waveform at a
 frequency of approximately 437 Hz.

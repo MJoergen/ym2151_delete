@@ -2,6 +2,7 @@
 
 # Add source files here as the project grows.
 SRC_DIR = ../src
+SRC    += $(SRC_DIR)/config.vhd
 SRC    += $(SRC_DIR)/rom_freq.vhd
 SRC    += $(SRC_DIR)/calc_freq.vhd
 SRC    += $(SRC_DIR)/rom_logsin.vhd
